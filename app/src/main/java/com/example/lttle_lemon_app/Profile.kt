@@ -16,13 +16,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.content.edit
+import androidx.navigation.NavHostController
 import com.example.lttle_lemon_app.components.Header
 import com.example.lttle_lemon_app.components.LogButton
 
 @Composable
-fun ProfileScreen() {
+fun Profile(navController: NavHostController) {
+    val sharedPreferences = LocalContext.current.getSharedPreferences(
+        "UserData", Context.MODE_PRIVATE
+    )
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(60.dp),
@@ -45,12 +49,15 @@ fun ProfileScreen() {
                 style = MaterialTheme.typography.bodyLarge
             )
             Column(verticalArrangement = Arrangement.spacedBy(30.dp)) {
-                UserDataText("first name")
-                UserDataText("last name")
-                UserDataText("e-mail")
+                UserDataText("firstName")
+                UserDataText("lastName")
+                UserDataText("email")
             }
         }
-        LogButton("Log out", {})
+        LogButton("Log out") {
+            sharedPreferences.edit { clear() }
+            navController.navigate(Home.route)
+        }
     }
 }
 
@@ -73,11 +80,4 @@ fun UserDataText(
         )
         Divider()
     }
-
-}
-
-@Preview
-@Composable
-fun ProfileScreenPrev() {
-    ProfileScreen()
 }

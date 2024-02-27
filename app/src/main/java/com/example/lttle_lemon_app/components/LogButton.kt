@@ -17,7 +17,7 @@ fun LogButton(
     onClick: () -> Unit
 ) {
     ElevatedButton(
-        onClick = { onClick },
+        onClick = onClick,
         colors = ButtonDefaults.buttonColors(containerColor = LLColor.yellow),
         shape = shapes.medium,
         modifier = Modifier.fillMaxWidth(0.7f)

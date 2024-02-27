@@ -3,6 +3,7 @@ package com.example.lttle_lemon_app
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -39,23 +40,14 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.lttle_lemon_app.components.HeaderWithImage
+import androidx.navigation.NavHostController
+import com.example.lttle_lemon_app.components.Header
 import com.example.lttle_lemon_app.ui.theme.LLColor
-import com.example.lttle_lemon_app.ui.theme.Lttle_Lemon_appTheme
-
-@Preview
-@Composable
-fun HomeScreenPrev() {
-    Lttle_Lemon_appTheme {
-        HomeScreen()
-    }
-}
 
 @Composable
-fun HomeScreen() {
+fun Home(navController: NavHostController) {
 
     var searchPhrase by rememberSaveable {
         mutableStateOf("")
@@ -65,7 +57,15 @@ fun HomeScreen() {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
-        HeaderWithImage()
+        Header {
+            Image(
+                painter = painterResource(id = R.drawable.profile),
+                contentDescription = "profile image",
+                modifier = Modifier
+                    .width(50.dp)
+                    .clickable { navController.navigate(Profile.route) }
+            )
+        }
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -124,7 +124,7 @@ fun HomeScreen() {
 @Composable
 fun LowerPanel() {
 
-    val categories = mutableListOf<String>(
+    val categories = mutableListOf(
         "Starters", "Mains", "Desserts", "Drinks", "Remove Filter"
     )
     Column(
@@ -225,7 +225,7 @@ data class MenuItem(
     @DrawableRes val image: Int
 )
 
-val MenuItemList = listOf<MenuItem>(
+val MenuItemList = listOf(
     MenuItem(
         "Greek Salad",
         "The famous greek salad of crispy lettuce, peppers, olives and our Chicago...",
