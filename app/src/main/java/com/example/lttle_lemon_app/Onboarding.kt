@@ -1,5 +1,6 @@
 package com.example.lttle_lemon_app
 
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -20,22 +21,31 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.content.edit
+import androidx.navigation.NavHostController
 import com.example.lttle_lemon_app.components.Header
 import com.example.lttle_lemon_app.components.LogButton
-import com.example.lttle_lemon_app.ui.theme.Lttle_Lemon_appTheme
 
 
 @Composable
-fun Onboarding() {
+fun Onboarding(navController: NavHostController) {
+    val sharedPreferences =
+        LocalContext.current.getSharedPreferences("UserData", Context.MODE_PRIVATE)
     var firstName by rememberSaveable { mutableStateOf("") }
 
     var lastName by rememberSaveable { mutableStateOf("") }
 
     var eMail by rememberSaveable { mutableStateOf("") }
+    var showMessage by rememberSaveable {
+        mutableStateOf(false)
+    }
+    var message by rememberSaveable {
+        mutableStateOf("")
+    }
 
     Column(
         modifier = Modifier.fillMaxSize()
@@ -85,7 +95,23 @@ fun Onboarding() {
                     placeholder = "alex.smiley@gmail.com"
                 )
             }
-            LogButton("Register", {})
+            LogButton(
+                "Register"
+            ) {
+                showMessage = true
+                message = if (firstName.isBlank() || lastName.isBlank() || eMail.isBlank()) {
+                    "Registration unsuccessful. Please enter all data"
+                } else {
+                    sharedPreferences.edit {
+                        putString("firstName", firstName)
+                        putString("lastName", lastName)
+                        putString("email", eMail)
+                        putBoolean("loggedIn", true)
+                    }
+                    navController.navigate(Home.route)
+                    "Registration successful!"
+                }
+            }
         }
     }
 }
@@ -108,10 +134,3 @@ fun CustomOutlinedTextField(
     )
 }
 
-@Preview
-@Composable
-fun OnboardinPrev() {
-    Lttle_Lemon_appTheme {
-        Onboarding()
-    }
-}
