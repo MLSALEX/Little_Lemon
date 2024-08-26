@@ -14,6 +14,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -29,6 +30,8 @@ import androidx.core.content.edit
 import androidx.navigation.NavHostController
 import com.example.lttle_lemon_app.components.Header
 import com.example.lttle_lemon_app.components.LogButton
+import com.example.lttle_lemon_app.components.SnackBar
+import kotlinx.coroutines.delay
 
 
 @Composable
@@ -95,9 +98,7 @@ fun Onboarding(navController: NavHostController) {
                     placeholder = "alex.smiley@gmail.com"
                 )
             }
-            LogButton(
-                "Register"
-            ) {
+            LogButton("Register") {
                 showMessage = true
                 message = if (firstName.isBlank() || lastName.isBlank() || eMail.isBlank()) {
                     "Registration unsuccessful. Please enter all data"
@@ -112,8 +113,12 @@ fun Onboarding(navController: NavHostController) {
                     "Registration successful!"
                 }
             }
+            if (showMessage) {
+                SnackBar(message = message)
+            }
         }
     }
+
 }
 
 @Composable

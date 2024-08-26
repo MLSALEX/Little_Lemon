@@ -20,7 +20,7 @@ val Typography = Typography(
     headlineLarge = TextStyle(
         fontFamily = Markazi,
         fontWeight = FontWeight.Medium,
-        fontSize = 64.sp,
+        fontSize = 58.sp,
         color = LLColor.yellow,
     ),
     headlineMedium = TextStyle(
@@ -32,7 +32,7 @@ val Typography = Typography(
     bodyMedium = TextStyle(
         fontFamily = Karla,
         fontWeight = FontWeight.Normal,
-        fontSize = 18.sp,
+        fontSize = 16.sp,
         color = Color.White,
     ),
     bodyLarge = TextStyle(
@@ -48,7 +48,7 @@ val Typography = Typography(
     labelMedium = TextStyle(
         fontFamily = Karla,
         fontWeight = FontWeight.Normal,
-        fontSize = 16.sp
+        fontSize = 14.sp
     )
 
 )

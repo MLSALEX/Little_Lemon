@@ -17,7 +17,7 @@ fun Header(content: @Composable () -> Unit = {}) {
     Row(
         Modifier
             .fillMaxWidth()
-            .padding(horizontal = 20.dp, vertical = 10.dp),
+            .padding(horizontal = 20.dp, vertical = 2.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Image(

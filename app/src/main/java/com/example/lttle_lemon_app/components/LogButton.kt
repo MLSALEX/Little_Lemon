@@ -13,7 +13,7 @@ import com.example.lttle_lemon_app.ui.theme.LLColor
 
 @Composable
 fun LogButton(
-    buttonText: String,
+    label: String,
     onClick: () -> Unit
 ) {
     ElevatedButton(
@@ -23,7 +23,7 @@ fun LogButton(
         modifier = Modifier.fillMaxWidth(0.7f)
     ) {
         Text(
-            text = buttonText,
+            text = label,
             color = Color.Black
         )
     }

@@ -29,7 +29,7 @@ fun Profile(navController: NavHostController) {
     )
     Column(
         modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(60.dp),
+        verticalArrangement = Arrangement.spacedBy(50.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Header()
@@ -56,7 +56,7 @@ fun Profile(navController: NavHostController) {
         }
         LogButton("Log out") {
             sharedPreferences.edit { clear() }
-            navController.navigate(Home.route)
+            navController.navigate(Onboarding.route)
         }
     }
 }
