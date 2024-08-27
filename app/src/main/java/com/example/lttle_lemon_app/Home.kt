@@ -103,20 +103,19 @@ fun UpperPanel(
             .padding(8.dp)
     ) {
         Column(
-            Modifier.fillMaxWidth(),
-
+            Modifier.fillMaxWidth()
         ) {
             Text(
                 text = stringResource(id = R.string.little_lemon),
                 style = MaterialTheme.typography.headlineLarge
             )
-            Text(
-                text = stringResource(id = R.string.chicago),
-                style = MaterialTheme.typography.headlineMedium
-            )
+
             Row {
                 Column() {
-
+                    Text(
+                        text = stringResource(id = R.string.chicago),
+                        style = MaterialTheme.typography.headlineMedium
+                    )
                     Text(
                         text = stringResource(R.string.description_restaurant),
                         style = MaterialTheme.typography.bodyMedium,
@@ -127,7 +126,7 @@ fun UpperPanel(
                     painter = painterResource(id = R.drawable.hero_image),
                     contentDescription = "",
                     modifier = Modifier
-                        .aspectRatio(0.7f)
+                        .aspectRatio(0.9f)
                         .clip(shapes.medium),
                     contentScale = ContentScale.FillBounds
                 )
