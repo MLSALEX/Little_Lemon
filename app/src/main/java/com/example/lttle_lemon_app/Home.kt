@@ -1,6 +1,5 @@
 package com.example.lttle_lemon_app
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -11,10 +10,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -32,12 +29,9 @@ import androidx.compose.material3.MaterialTheme.shapes
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
-import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.setValue
@@ -52,9 +46,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
@@ -66,11 +59,11 @@ fun Home(navController: NavHostController, database: AppDatabase) {
     var searchPhrase by rememberSaveable { mutableStateOf("") }
     val focusManager = LocalFocusManager.current
 
-    // Общее состояние категорий и выбранной категории
+    // General state for categories and selected category
     val categories = listOf("Starters", "Mains", "Desserts", "Drinks", "Remove Filter")
     var selectedCategory by rememberSaveable { mutableStateOf("") }
 
-    // Получение данных из базы данных
+    // Fetch data from the database
     val databaseMenuItems by database.menuItemDao().getAll().observeAsState(emptyList())
     val menuItems = filterMenuItems(databaseMenuItems, searchPhrase, selectedCategory)
 
@@ -88,10 +81,9 @@ fun Home(navController: NavHostController, database: AppDatabase) {
                     .clickable { navController.navigate(Profile.route) }
             )
         }
-        SearchSection(searchPhrase, onSearchPhraseChange = { searchPhrase = it }, focusManager)
+        UpperPanel(searchPhrase, onSearchPhraseChange = { searchPhrase = it }, focusManager)
         LowerPanel(
             categories = categories,
-            selectedCategory = selectedCategory,
             onCategorySelected = { selectedCategory = it },
             menuItems = menuItems
         )
@@ -99,7 +91,7 @@ fun Home(navController: NavHostController, database: AppDatabase) {
 }
 
 @Composable
-fun SearchSection(
+fun UpperPanel(
     searchPhrase: String,
     onSearchPhraseChange: (String) -> Unit,
     focusManager: FocusManager
@@ -108,22 +100,23 @@ fun SearchSection(
         modifier = Modifier
             .fillMaxWidth()
             .background(color = LLColor.green)
-            .padding(10.dp)
+            .padding(8.dp)
     ) {
         Column(
             Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(5.dp)
+
         ) {
             Text(
                 text = stringResource(id = R.string.little_lemon),
                 style = MaterialTheme.typography.headlineLarge
             )
+            Text(
+                text = stringResource(id = R.string.chicago),
+                style = MaterialTheme.typography.headlineMedium
+            )
             Row {
-                Column(verticalArrangement = Arrangement.spacedBy(5.dp)) {
-                    Text(
-                        text = stringResource(id = R.string.chicago),
-                        style = MaterialTheme.typography.headlineMedium
-                    )
+                Column() {
+
                     Text(
                         text = stringResource(R.string.description_restaurant),
                         style = MaterialTheme.typography.bodyMedium,
@@ -164,7 +157,6 @@ fun SearchSection(
 @Composable
 fun LowerPanel(
     categories: List<String>,
-    selectedCategory: String,
     onCategorySelected: (String) -> Unit,
     menuItems: List<MenuItemRoom>
 ) {
@@ -174,9 +166,11 @@ fun LowerPanel(
             .padding(horizontal = 10.dp)
     ) {
         Row(
-            horizontalArrangement = Arrangement.spacedBy(80.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(horizontal = 20.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp)
         ) {
             Text(
                 text = stringResource(id = R.string.order_for_delivery),
@@ -204,20 +198,61 @@ fun LowerPanel(
                 }
             }
         }
-        VerticalDivider(Modifier.padding(10.dp))
-        MenuItemsList(items = menuItems)
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
+            items(menuItems) { menuItem ->
+                MenuItemCard(menuItem = menuItem)
+            }
+        }
     }
 }
 
+@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun MenuItemsList(items: List<MenuItemRoom>) {
-    LazyColumn(
+fun MenuItemCard(menuItem: MenuItemRoom) {
+    Card(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 20.dp)
+            .fillMaxWidth()
+            .padding(2.dp)
     ) {
-        items(items) { menuItem ->
-            Text(text = menuItem.title)
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp)
+        ) {
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(end = 8.dp),
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                Text(
+                    text = menuItem.title,
+                    style = MaterialTheme.typography.labelLarge
+                )
+                Text(
+                    text = menuItem.description,
+                    style = MaterialTheme.typography.labelMedium,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Text(
+                    text = "$${menuItem.price.toString()}",
+                    style = MaterialTheme.typography.labelLarge
+                )
+            }
+            GlideImage(
+                model = menuItem.image,
+                contentDescription = "Menu dish",
+                modifier = Modifier
+                    .align(Alignment.CenterVertically)
+                    .weight(0.3f)
+                    .aspectRatio(1f),
+                contentScale = ContentScale.Crop
+            )
         }
     }
 }
