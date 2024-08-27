@@ -46,7 +46,7 @@ class MainActivity : ComponentActivity() {
     }
     private suspend fun fetchMenu(): List<MenuItemNetwork> {
         return httpClient
-            .get("https://raw.githubusercontent.com/Meta-Mobile-Developer-PC/Working-With-Data-API/main/menu.json ")
+            .get("https://raw.githubusercontent.com/MLSALEX/Menu_Data_LL/main/menu.json ")
             .body<MenuNetwork>()
             .menu
     }

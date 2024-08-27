@@ -106,7 +106,7 @@ fun UpperPanel(
             Modifier.fillMaxWidth()
         ) {
             Text(
-                text = stringResource(id = R.string.little_lemon),
+                text = stringResource(id = R.string.app_name),
                 style = MaterialTheme.typography.headlineLarge
             )
 
