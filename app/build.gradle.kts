@@ -81,6 +81,9 @@ dependencies {
     implementation("androidx.room:room-runtime:2.6.1")
     kapt ("androidx.room:room-compiler:2.6.1")
     implementation("com.github.bumptech.glide:compose:1.0.0-alpha.1")
+    implementation("com.github.skydoves:landscapist-glide:2.2.7")
+
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.4")
 
 }
 

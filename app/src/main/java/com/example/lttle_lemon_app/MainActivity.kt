@@ -54,6 +54,5 @@ class MainActivity : ComponentActivity() {
         val menuItemRoom = menuItemNetwork.map { it.toMenuItemRoom() }
         database.menuItemDao().insertAll(*menuItemRoom.toTypedArray())
     }
-
 }
 
