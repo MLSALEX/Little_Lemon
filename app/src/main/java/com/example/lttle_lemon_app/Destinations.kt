@@ -15,3 +15,8 @@ object Onboarding : Destinations {
 object Profile : Destinations {
     override val route = "Profile"
 }
+
+object MenuItemDetails : Destinations {
+    override val route = "menuItemDetails"
+    const val argDishId = "dishId"
+}

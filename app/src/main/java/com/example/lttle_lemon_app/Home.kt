@@ -21,6 +21,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Card
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
@@ -85,7 +86,8 @@ fun Home(navController: NavHostController, database: AppDatabase) {
         LowerPanel(
             categories = categories,
             onCategorySelected = { selectedCategory = it },
-            menuItems = menuItems
+            menuItems = menuItems,
+            navController = navController
         )
     }
 }
@@ -157,7 +159,8 @@ fun UpperPanel(
 fun LowerPanel(
     categories: List<String>,
     onCategorySelected: (String) -> Unit,
-    menuItems: List<MenuItemRoom>
+    menuItems: List<MenuItemRoom>,
+    navController: NavHostController
 ) {
     Column(
         modifier = Modifier
@@ -202,19 +205,22 @@ fun LowerPanel(
                 .fillMaxSize()
         ) {
             items(menuItems) { menuItem ->
-                MenuItemCard(menuItem = menuItem)
+                MenuItemCard(menuItem = menuItem){
+                    navController.navigate("${MenuItemDetails.route}/${menuItem.id}")
+                }
             }
         }
     }
 }
 
-@OptIn(ExperimentalGlideComposeApi::class)
+@OptIn(ExperimentalGlideComposeApi::class, ExperimentalMaterialApi::class)
 @Composable
-fun MenuItemCard(menuItem: MenuItemRoom) {
+fun MenuItemCard(menuItem: MenuItemRoom, onItemClicked: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(2.dp)
+            .padding(2.dp),
+        onClick = {onItemClicked()}
     ) {
         Row(
             modifier = Modifier
