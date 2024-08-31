@@ -20,3 +20,7 @@ object MenuItemDetails : Destinations {
     override val route = "menuItemDetails"
     const val argDishId = "dishId"
 }
+
+object CartScreen : Destinations {
+    override val route = "Cart"
+}
