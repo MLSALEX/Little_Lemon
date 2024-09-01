@@ -21,10 +21,10 @@ Installation
 3.	Sync the project with Gradle files.
 4.	Run the app on an Android emulator or a physical device.
 
-<img src="https://github.com/user-attachments/assets/79f7ad3c-ec51-4c92-ac3d-dfaa0fa1d91a" alt="Screenshot 3" width="300"/>
-<img src="https://github.com/user-attachments/assets/ce747e32-4be9-437f-a6e2-dea99931d371" alt="Screenshot 2" width="300"/>
-<img src="https://github.com/user-attachments/assets/99dcc1ef-7955-4f93-8531-e539d42bcf38" alt="Screenshot 1" width="300"/>
-<img src="https://github.com/user-attachments/assets/30fbaff0-dcd4-4634-a2de-38551e4bb060" alt="Screenshot 2" width="300"/>
-<img src="https://github.com/user-attachments/assets/d909f3a3-ae48-40ba-93d0-47d169beed4b" alt="Screenshot 2" width="300"/>
+<img src="https://github.com/user-attachments/assets/79f7ad3c-ec51-4c92-ac3d-dfaa0fa1d91a" alt="Screenshot 3" width="200"/>
+<img src="https://github.com/user-attachments/assets/ce747e32-4be9-437f-a6e2-dea99931d371" alt="Screenshot 2" width="200"/>
+<img src="https://github.com/user-attachments/assets/99dcc1ef-7955-4f93-8531-e539d42bcf38" alt="Screenshot 1" width="200"/>
+<img src="https://github.com/user-attachments/assets/30fbaff0-dcd4-4634-a2de-38551e4bb060" alt="Screenshot 2" width="200"/>
+<img src="https://github.com/user-attachments/assets/d909f3a3-ae48-40ba-93d0-47d169beed4b" alt="Screenshot 2" width="200"/>
 
 
