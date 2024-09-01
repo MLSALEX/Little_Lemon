@@ -21,4 +21,9 @@ Installation
 3.	Sync the project with Gradle files.
 4.	Run the app on an Android emulator or a physical device.
 
+![Screenshot_20240901-212039_Little_Lemon 1](https://github.com/u![Screenshot_20240901-212306_Little_Lemon 1](https://github.com/user-attachments/assets/d68f5399-5eb8-474a-918a-f99f393c310d)
+![Screenshot_20240901-212245_Little_Lemon 1](https://github.com/user-attachments/assets/99dcc1ef-7955-4f93-8531-e539d42bcf38)
+![Screenshot_20240901-212215_Little_Lemon 1](https://github.com/user-attachments/assets/ce747e32-4be9-437f-a6e2-dea99931d371)
+![Screenshot_20240901-212202_Little_Lemon 1](https://github.com/user-attachments/assets/79f7ad3c-ec51-4c92-ac3d-dfaa0fa1d91a)
+ser-attachments/assets/1c8764b9-7381-43a4-98de-a2cae4c550bc)
 
