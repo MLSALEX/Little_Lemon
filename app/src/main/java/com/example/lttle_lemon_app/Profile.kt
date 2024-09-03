@@ -7,7 +7,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Divider
+import androidx.compose.material3.DrawerState
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,11 +20,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
 import androidx.navigation.NavHostController
-import com.example.lttle_lemon_app.components.Header
 import com.example.lttle_lemon_app.components.LogButton
+import com.example.lttle_lemon_app.components.TopAppBar
+import kotlinx.coroutines.CoroutineScope
 
 @Composable
-fun Profile(navController: NavHostController) {
+fun Profile(navController: NavHostController, drawerState: DrawerState, scope: CoroutineScope) {
     val sharedPreferences = LocalContext.current.getSharedPreferences(
         "UserData", Context.MODE_PRIVATE
     )
@@ -32,7 +34,11 @@ fun Profile(navController: NavHostController) {
         verticalArrangement = Arrangement.spacedBy(50.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Header()
+        TopAppBar(
+            navController = navController,
+            drawerState = drawerState,
+            scope = scope
+        )
         Image(
             painter = painterResource(id = R.drawable.profile),
             contentDescription = ""
@@ -78,6 +84,6 @@ fun UserDataText(
             "${sharedPreferences.getString(userData, "")}",
             style = MaterialTheme.typography.bodyLarge
         )
-        Divider()
+        HorizontalDivider()
     }
 }

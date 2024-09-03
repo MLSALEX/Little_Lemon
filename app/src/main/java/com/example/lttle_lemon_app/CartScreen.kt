@@ -2,6 +2,7 @@ package com.example.lttle_lemon_app
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,6 +13,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Divider
 import androidx.compose.material3.Button
+import androidx.compose.material3.DrawerState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -30,37 +32,43 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.lttle_lemon_app.components.TopAppBar
+import kotlinx.coroutines.CoroutineScope
 
 @Composable
 fun CartScreen(
     navController: NavHostController,
-    cartViewModel: CartViewModel = viewModel()
+    cartViewModel: CartViewModel = viewModel(),
+    drawerState: DrawerState,
+    scope: CoroutineScope
 ) {
     val cartItems by cartViewModel.cartItems.collectAsState()
     val totalAmount = cartViewModel.getTotalAmount()
 
     var isAnimating by remember { mutableStateOf(false) }
 
-    val scale by animateFloatAsState(targetValue = if (isAnimating) 1.5f else 1f)
-
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.SpaceBetween) {
         TopAppBar(
-            navController = navController
+            navController = navController,
+            drawerState = drawerState,
+            scope = scope
         )
 
-        LazyColumn(modifier = Modifier.weight(1f)) {
-            items(cartItems) { cartItem ->
-                CartItemRow(cartItem = cartItem, onIncrease = {
-                    cartViewModel.addItemToCart(cartItem.menuItem, 1)
-                    isAnimating = true
-                }, onDecrease = {
-                    cartViewModel.removeItemFromCart(cartItem.menuItem)
-                })
-                Divider()
+        Box {
+            LazyColumn() {
+                items(cartItems) { cartItem ->
+                    CartItemRow(cartItem = cartItem, onIncrease = {
+                        cartViewModel.addItemToCart(cartItem.menuItem, 1)
+                        isAnimating = true
+                    }, onDecrease = {
+                        cartViewModel.removeItemFromCart(cartItem.menuItem)
+                    })
+                    Divider()
+                }
             }
         }
 
-        Spacer(modifier = Modifier.weight(1f))
+
 
         Text(
             text = "Total: $${totalAmount}",
@@ -95,13 +103,13 @@ fun CartItemRow(cartItem: CartItem, onIncrease: () -> Unit, onDecrease: () -> Un
             text = cartItem.menuItem.title,
             style = MaterialTheme.typography.bodyLarge
         )
-        Row (
+        Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center,
-        ){
+        ) {
             IconButton(
                 onClick = onDecrease
-                ) {
+            ) {
                 Icon(
                     painter = painterResource(id = R.drawable.baseline_remove_24),
                     contentDescription = "Decrease quantity"
@@ -116,7 +124,7 @@ fun CartItemRow(cartItem: CartItem, onIncrease: () -> Unit, onDecrease: () -> Un
 
             IconButton(
                 onClick = onIncrease
-                ) {
+            ) {
                 Icon(
                     painter = painterResource(id = R.drawable.baseline_add_24),
                     contentDescription = "Increase quantity"

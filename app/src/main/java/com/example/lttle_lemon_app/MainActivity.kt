@@ -3,6 +3,7 @@ package com.example.lttle_lemon_app
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.rememberNavController
 import androidx.room.Room
@@ -31,10 +32,11 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         setContent {
             Lttle_Lemon_appTheme {
                 val navController = rememberNavController()
-                Navigation(navController = navController, database = database)
+                MyDrawer(navController = navController, database = database)
             }
         }
         lifecycleScope.launch(Dispatchers.IO) {
@@ -44,12 +46,14 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
     private suspend fun fetchMenu(): List<MenuItemNetwork> {
         return httpClient
             .get("https://raw.githubusercontent.com/MLSALEX/Menu_Data_LL/main/menu.json ")
             .body<MenuNetwork>()
             .menu
     }
+
     private fun saveMenuToDatabase(menuItemNetwork: List<MenuItemNetwork>) {
         val menuItemRoom = menuItemNetwork.map { it.toMenuItemRoom() }
         database.menuItemDao().insertAll(*menuItemRoom.toTypedArray())
