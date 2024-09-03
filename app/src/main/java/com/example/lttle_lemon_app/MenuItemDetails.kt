@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -33,14 +34,18 @@ import androidx.navigation.NavHostController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.example.lttle_lemon_app.components.TopAppBar
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalGlideComposeApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun MenuItemDetails(
     navController: NavHostController,
-    id: Int, menuItemDao: MenuItemDao,
-    cartViewModel: CartViewModel = viewModel()
+    id: Int,
+    menuItemDao: MenuItemDao,
+    cartViewModel: CartViewModel = viewModel(),
+    drawerState: DrawerState,
+    scope: CoroutineScope
 ) {
     val menuItems by menuItemDao.getAll().observeAsState(initial = emptyList())
 
@@ -60,9 +65,12 @@ fun MenuItemDetails(
     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
         TopAppBar(
             navController = navController,
+            showCart = true,
             cartScale = scale,
             showBadge = showBadge,
-            badgeOffset = badgeOffset
+            badgeOffset = badgeOffset,
+            drawerState = drawerState,
+            scope = scope
         )
         GlideImage(
             model = dish.image,

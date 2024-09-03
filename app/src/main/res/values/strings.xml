@@ -6,4 +6,7 @@
     <string name="order_for_delivery">ORDER FOR DELIVERY!</string>
     <string name="personal_info">Personal information:</string>
     <string name="add_for">Add for</string>
+    <string name="settings" />
+    <string name="address" />
+    <string name="phone" />
 </resources>

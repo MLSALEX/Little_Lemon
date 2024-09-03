@@ -2,13 +2,10 @@ package com.example.lttle_lemon_app
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-
 import androidx.compose.foundation.layout.Row
-
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,6 +21,7 @@ import androidx.compose.material.Card
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.DrawerState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MaterialTheme.shapes
@@ -32,9 +30,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -52,11 +50,17 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
-import com.example.lttle_lemon_app.components.Header
+import com.example.lttle_lemon_app.components.TopAppBar
 import com.example.lttle_lemon_app.ui.theme.LLColor
+import kotlinx.coroutines.CoroutineScope
 
 @Composable
-fun Home(navController: NavHostController, database: AppDatabase) {
+fun Home(
+    navController: NavHostController,
+    database: AppDatabase,
+    drawerState: DrawerState,
+    scope: CoroutineScope
+) {
     var searchPhrase by rememberSaveable { mutableStateOf("") }
     val focusManager = LocalFocusManager.current
 
@@ -73,15 +77,13 @@ fun Home(navController: NavHostController, database: AppDatabase) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
-        Header {
-            Image(
-                painter = painterResource(id = R.drawable.profile),
-                contentDescription = "profile image",
-                modifier = Modifier
-                    .width(50.dp)
-                    .clickable { navController.navigate(Profile.route) }
-            )
-        }
+        TopAppBar(
+            navController = navController,
+            showProfileImage = true,
+            onProfileClick = { navController.navigate(Profile.route) },
+            drawerState = drawerState,
+            scope = scope
+        )
         UpperPanel(searchPhrase, onSearchPhraseChange = { searchPhrase = it }, focusManager)
         LowerPanel(
             categories = categories,
@@ -113,7 +115,7 @@ fun UpperPanel(
             )
 
             Row {
-                Column() {
+                Column {
                     Text(
                         text = stringResource(id = R.string.chicago),
                         style = MaterialTheme.typography.headlineMedium
@@ -205,7 +207,7 @@ fun LowerPanel(
                 .fillMaxSize()
         ) {
             items(menuItems) { menuItem ->
-                MenuItemCard(menuItem = menuItem){
+                MenuItemCard(menuItem = menuItem) {
                     navController.navigate("${MenuItemDetails.route}/${menuItem.id}")
                 }
             }
@@ -220,7 +222,7 @@ fun MenuItemCard(menuItem: MenuItemRoom, onItemClicked: () -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(2.dp),
-        onClick = {onItemClicked()}
+        onClick = { onItemClicked() }
     ) {
         Row(
             modifier = Modifier
@@ -245,7 +247,7 @@ fun MenuItemCard(menuItem: MenuItemRoom, onItemClicked: () -> Unit) {
                     modifier = Modifier.fillMaxWidth()
                 )
                 Text(
-                    text = "$${menuItem.price.toString()}",
+                    text = "$${menuItem.price}",
                     style = MaterialTheme.typography.labelLarge
                 )
             }
@@ -267,11 +269,8 @@ fun filterMenuItems(
     searchPhrase: String,
     selectedCategory: String
 ): List<MenuItemRoom> {
-    return if (searchPhrase.isNotEmpty()) {
-        menuItems.filter { it.title.contains(searchPhrase, ignoreCase = true) }
-    } else if (selectedCategory.isNotEmpty()) {
-        menuItems.filter { it.category.equals(selectedCategory, ignoreCase = true) }
-    } else {
-        menuItems
+    return menuItems.filter {
+        (searchPhrase.isEmpty() || it.title.contains(searchPhrase, ignoreCase = true)) &&
+                (selectedCategory.isEmpty() || it.category.equals(selectedCategory, ignoreCase = true))
     }
 }

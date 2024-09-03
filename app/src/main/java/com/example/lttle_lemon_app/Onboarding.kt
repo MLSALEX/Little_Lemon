@@ -10,11 +10,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.DrawerState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -28,14 +28,18 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
 import androidx.navigation.NavHostController
-import com.example.lttle_lemon_app.components.Header
 import com.example.lttle_lemon_app.components.LogButton
 import com.example.lttle_lemon_app.components.SnackBar
-import kotlinx.coroutines.delay
+import com.example.lttle_lemon_app.components.TopAppBar
+import kotlinx.coroutines.CoroutineScope
 
 
 @Composable
-fun Onboarding(navController: NavHostController) {
+fun Onboarding(
+    navController: NavHostController,
+    drawerState: DrawerState,
+    scope: CoroutineScope
+) {
     val sharedPreferences =
         LocalContext.current.getSharedPreferences("UserData", Context.MODE_PRIVATE)
     var firstName by rememberSaveable { mutableStateOf("") }
@@ -51,9 +55,18 @@ fun Onboarding(navController: NavHostController) {
     }
 
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(50.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Header()
+        TopAppBar(
+            navController = navController,
+            logoClickable = false,
+            showProfileImage = false,
+            showMenuButton = false,
+            drawerState = drawerState,
+            scope = scope
+        )
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(60.dp)

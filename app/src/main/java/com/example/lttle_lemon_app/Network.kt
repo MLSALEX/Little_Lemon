@@ -8,8 +8,9 @@ data class MenuNetwork(
     @SerialName("menu")
     val menu: List<MenuItemNetwork>
 )
+
 @Serializable
-data class MenuItemNetwork (
+data class MenuItemNetwork(
     @SerialName("id")
     val id: Int,
     @SerialName("title")
@@ -22,7 +23,7 @@ data class MenuItemNetwork (
     val image: String,
     @SerialName("category")
     val category: String,
-){
+) {
     fun toMenuItemRoom() = MenuItemRoom(
         id = id,
         title = title,
