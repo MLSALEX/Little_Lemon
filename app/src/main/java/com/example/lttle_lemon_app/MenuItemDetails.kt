@@ -44,8 +44,7 @@ fun MenuItemDetails(
     id: Int,
     menuItemDao: MenuItemDao,
     cartViewModel: CartViewModel = viewModel(),
-    drawerState: DrawerState,
-    scope: CoroutineScope
+    openDrawer:() -> Unit
 ) {
     val menuItems by menuItemDao.getAll().observeAsState(initial = emptyList())
 
@@ -69,8 +68,7 @@ fun MenuItemDetails(
             cartScale = scale,
             showBadge = showBadge,
             badgeOffset = badgeOffset,
-            drawerState = drawerState,
-            scope = scope
+            openDrawer = openDrawer
         )
         GlideImage(
             model = dish.image,

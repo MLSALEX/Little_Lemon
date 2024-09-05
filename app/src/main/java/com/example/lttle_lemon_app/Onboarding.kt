@@ -37,8 +37,7 @@ import kotlinx.coroutines.CoroutineScope
 @Composable
 fun Onboarding(
     navController: NavHostController,
-    drawerState: DrawerState,
-    scope: CoroutineScope
+    openDrawer:() -> Unit
 ) {
     val sharedPreferences =
         LocalContext.current.getSharedPreferences("UserData", Context.MODE_PRIVATE)
@@ -64,8 +63,7 @@ fun Onboarding(
             logoClickable = false,
             showProfileImage = false,
             showMenuButton = false,
-            drawerState = drawerState,
-            scope = scope
+            openDrawer = openDrawer
         )
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -112,18 +110,30 @@ fun Onboarding(
                 )
             }
             LogButton("Register") {
-                showMessage = true
-                message = if (firstName.isBlank() || lastName.isBlank() || eMail.isBlank()) {
-                    "Registration unsuccessful. Please enter all data"
-                } else {
-                    sharedPreferences.edit {
-                        putString("firstName", firstName)
-                        putString("lastName", lastName)
-                        putString("email", eMail)
-                        putBoolean("loggedIn", true)
+                when {
+                    !isValidName(firstName) -> {
+                        showMessage = true
+                        message = "Please enter a valid first name."
                     }
-                    navController.navigate(Home.route)
-                    "Registration successful!"
+                    !isValidName(lastName) -> {
+                        showMessage = true
+                        message = "Please enter a valid last name."
+                    }
+                    !isValidEmail(eMail) -> {
+                        showMessage = true
+                        message = "Please enter a valid email address."
+                    }
+                    else -> {
+                        sharedPreferences.edit {
+                            putString("firstName", firstName)
+                            putString("lastName", lastName)
+                            putString("email", eMail)
+                            putBoolean("loggedIn", true)
+                        }
+                        navController.navigate(Home.route)
+                        message = "Registration successful!"
+                        showMessage = true
+                    }
                 }
             }
             if (showMessage) {
@@ -152,3 +162,10 @@ fun CustomOutlinedTextField(
     )
 }
 
+fun isValidEmail(email: String): Boolean {
+    return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+}
+
+fun isValidName(name: String): Boolean {
+    return name.isNotBlank() && name.length >= 2
+}

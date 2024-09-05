@@ -22,10 +22,11 @@ import androidx.core.content.edit
 import androidx.navigation.NavHostController
 import com.example.lttle_lemon_app.components.LogButton
 import com.example.lttle_lemon_app.components.TopAppBar
+
 import kotlinx.coroutines.CoroutineScope
 
 @Composable
-fun Profile(navController: NavHostController, drawerState: DrawerState, scope: CoroutineScope) {
+fun Profile(navController: NavHostController, openDrawer:() -> Unit) {
     val sharedPreferences = LocalContext.current.getSharedPreferences(
         "UserData", Context.MODE_PRIVATE
     )
@@ -36,8 +37,7 @@ fun Profile(navController: NavHostController, drawerState: DrawerState, scope: C
     ) {
         TopAppBar(
             navController = navController,
-            drawerState = drawerState,
-            scope = scope
+            openDrawer = openDrawer
         )
         Image(
             painter = painterResource(id = R.drawable.profile),

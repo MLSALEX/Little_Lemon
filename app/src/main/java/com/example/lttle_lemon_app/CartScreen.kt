@@ -38,8 +38,7 @@ import kotlinx.coroutines.CoroutineScope
 fun CartScreen(
     navController: NavHostController,
     cartViewModel: CartViewModel = viewModel(),
-    drawerState: DrawerState,
-    scope: CoroutineScope
+    openDrawer:() -> Unit
 ) {
     val cartItems by cartViewModel.cartItems.collectAsState()
     val totalAmount = cartViewModel.getTotalAmount()
@@ -50,8 +49,7 @@ fun CartScreen(
         verticalArrangement = Arrangement.SpaceBetween) {
         TopAppBar(
             navController = navController,
-            drawerState = drawerState,
-            scope = scope
+            openDrawer = openDrawer
         )
 
         Box {
