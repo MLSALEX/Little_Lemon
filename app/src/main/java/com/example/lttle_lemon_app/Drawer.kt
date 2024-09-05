@@ -1,5 +1,6 @@
 package com.example.lttle_lemon_app
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -22,11 +23,27 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import com.example.lttle_lemon_app.components.TopAppBar
+import kotlinx.coroutines.launch
+
 
 @Composable
 fun MyDrawer(navController: NavHostController, database: AppDatabase) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
+
+    val openDrawer: () -> Unit = {
+        scope.launch {
+            drawerState.open()
+        }
+    }
+    val closeDrawer: () -> Unit = {
+        scope.launch {
+            drawerState.close()
+        }
+    }
+    BackHandler(enabled = drawerState.isOpen) {
+        closeDrawer()
+    }
 
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -40,8 +57,7 @@ fun MyDrawer(navController: NavHostController, database: AppDatabase) {
                     Navigation(
                         navController = navController,
                         database = database,
-                        drawerState = drawerState,
-                        scope = scope
+                        openDrawer = openDrawer
                     )
                 }
             }

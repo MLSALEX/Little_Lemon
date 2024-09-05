@@ -7,7 +7,6 @@ object LLColor {
     val yellow = Color(0xFFF4CE14)
 
     val pink = Color(0xFFFBDABB)
-    val peach = Color(0xFFFBDABB)
 
     val cloud = Color(0xFFEDEFEE)
     val charcoal = Color(0xFF333333)
@@ -31,7 +30,7 @@ val md_theme_light_onError = Color(0xFFFFFFFF)
 val md_theme_light_onErrorContainer = Color(0xFF410002)
 val md_theme_light_background = Color(0xFFEDEFEE)
 val md_theme_light_onBackground = Color(0xFF002022)
-val md_theme_light_surface = Color(0xFFEDEFEE)
+val md_theme_light_surface = Color(0xFFFFFFFF)
 val md_theme_light_onSurface = Color(0xFF002022)
 val md_theme_light_surfaceVariant = Color(0xFFDBE5E0)
 val md_theme_light_onSurfaceVariant = Color(0xFF3F4945)

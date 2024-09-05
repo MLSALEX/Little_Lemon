@@ -58,8 +58,7 @@ import kotlinx.coroutines.CoroutineScope
 fun Home(
     navController: NavHostController,
     database: AppDatabase,
-    drawerState: DrawerState,
-    scope: CoroutineScope
+    openDrawer:() -> Unit
 ) {
     var searchPhrase by rememberSaveable { mutableStateOf("") }
     val focusManager = LocalFocusManager.current
@@ -81,8 +80,7 @@ fun Home(
             navController = navController,
             showProfileImage = true,
             onProfileClick = { navController.navigate(Profile.route) },
-            drawerState = drawerState,
-            scope = scope
+            openDrawer = openDrawer
         )
         UpperPanel(searchPhrase, onSearchPhraseChange = { searchPhrase = it }, focusManager)
         LowerPanel(

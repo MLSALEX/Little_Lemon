@@ -37,8 +37,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun TopAppBar(
     navController: NavHostController,
-    drawerState: DrawerState,
-    scope: CoroutineScope,
+    openDrawer: () -> Unit,
     showMenuButton: Boolean = true,
     showLogo: Boolean = true,
     logoClickable: Boolean = true,
@@ -58,9 +57,7 @@ fun TopAppBar(
         verticalAlignment = Alignment.CenterVertically
     ) {
         if (showMenuButton) {
-            IconButton(onClick = {
-                scope.launch { drawerState.open() }
-            }) {
+            IconButton(onClick = openDrawer) {
                 Image(
                     painter = painterResource(id = R.drawable.ic_hamburger_menu),
                     contentDescription = "Menu Icon",

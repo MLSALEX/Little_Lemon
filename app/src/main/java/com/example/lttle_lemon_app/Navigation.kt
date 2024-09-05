@@ -16,8 +16,7 @@ import kotlinx.coroutines.CoroutineScope
 fun Navigation(
     navController: NavHostController,
     database: AppDatabase,
-    drawerState: DrawerState,
-    scope: CoroutineScope
+    openDrawer:() -> Unit
 ) {
     val cartViewModel: CartViewModel = viewModel()
 
@@ -35,13 +34,13 @@ fun Navigation(
         }
     ) {
         composable(Onboarding.route) {
-            Onboarding(navController, drawerState, scope)
+            Onboarding(navController, openDrawer)
         }
         composable(Home.route) {
-            Home(navController, database, drawerState, scope)
+            Home(navController, database, openDrawer)
         }
         composable(Profile.route) {
-            Profile(navController, drawerState,scope)
+            Profile(navController, openDrawer)
         }
         composable(
             MenuItemDetails.route + "/{${MenuItemDetails.argDishId}}",
@@ -49,10 +48,10 @@ fun Navigation(
         ) {
             val id =
                 requireNotNull(it.arguments?.getInt(MenuItemDetails.argDishId)) { "Dish id is null" }
-            MenuItemDetails(navController, id, menuItemDao = database.menuItemDao(), cartViewModel, drawerState, scope)
+            MenuItemDetails(navController, id, menuItemDao = database.menuItemDao(), cartViewModel, openDrawer)
         }
         composable(CartScreen.route) {
-            CartScreen(navController, cartViewModel, drawerState, scope)
+            CartScreen(navController, cartViewModel, openDrawer)
         }
     }
 }
