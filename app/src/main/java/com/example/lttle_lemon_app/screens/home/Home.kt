@@ -1,5 +1,6 @@
-package com.example.lttle_lemon_app
+package com.example.lttle_lemon_app.screens.home
 
+import android.content.SharedPreferences
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -21,7 +22,6 @@ import androidx.compose.material.Card
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.DrawerState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MaterialTheme.shapes
@@ -29,6 +29,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -39,6 +40,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -47,29 +49,32 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
+import com.example.lttle_lemon_app.AppDatabase
+import com.example.lttle_lemon_app.MenuItemDetails
+import com.example.lttle_lemon_app.MenuItemRoom
+import com.example.lttle_lemon_app.Profile
+import com.example.lttle_lemon_app.R
 import com.example.lttle_lemon_app.components.TopAppBar
 import com.example.lttle_lemon_app.ui.theme.LLColor
-import kotlinx.coroutines.CoroutineScope
+import com.example.lttle_lemon_app.viewModelFactory.AppViewModelFactory
 
 @Composable
 fun Home(
     navController: NavHostController,
     database: AppDatabase,
+    sharedPreferences: SharedPreferences,
     openDrawer:() -> Unit
 ) {
-    var searchPhrase by rememberSaveable { mutableStateOf("") }
+    val viewModel: HomeViewModel = viewModel(factory = AppViewModelFactory(sharedPreferences, database))
+    val uiState by viewModel.uiState.collectAsState()
     val focusManager = LocalFocusManager.current
 
     // General state for categories and selected category
     val categories = listOf("Starters", "Mains", "Desserts", "Drinks", "Remove Filter")
-    var selectedCategory by rememberSaveable { mutableStateOf("") }
-
-    // Fetch data from the database
-    val databaseMenuItems by database.menuItemDao().getAll().observeAsState(emptyList())
-    val menuItems = filterMenuItems(databaseMenuItems, searchPhrase, selectedCategory)
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -82,11 +87,14 @@ fun Home(
             onProfileClick = { navController.navigate(Profile.route) },
             openDrawer = openDrawer
         )
-        UpperPanel(searchPhrase, onSearchPhraseChange = { searchPhrase = it }, focusManager)
+        UpperPanel(
+            searchPhrase = uiState.searchPhrase,
+            onSearchPhraseChange = { viewModel.onSearchPhraseChange(it) },
+            focusManager = focusManager)
         LowerPanel(
             categories = categories,
-            onCategorySelected = { selectedCategory = it },
-            menuItems = menuItems,
+            onCategorySelected = { viewModel.onCategorySelected(it) },
+            menuItems = uiState.menuItems,
             navController = navController
         )
     }
@@ -262,13 +270,3 @@ fun MenuItemCard(menuItem: MenuItemRoom, onItemClicked: () -> Unit) {
     }
 }
 
-fun filterMenuItems(
-    menuItems: List<MenuItemRoom>,
-    searchPhrase: String,
-    selectedCategory: String
-): List<MenuItemRoom> {
-    return menuItems.filter {
-        (searchPhrase.isEmpty() || it.title.contains(searchPhrase, ignoreCase = true)) &&
-                (selectedCategory.isEmpty() || it.category.equals(selectedCategory, ignoreCase = true))
-    }
-}
