@@ -1,4 +1,4 @@
-package com.example.lttle_lemon_app
+package com.example.lttle_lemon_app.components
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
@@ -22,7 +22,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
-import com.example.lttle_lemon_app.components.TopAppBar
+import com.example.lttle_lemon_app.AppDatabase
+import com.example.lttle_lemon_app.Navigation
+import com.example.lttle_lemon_app.R
 import kotlinx.coroutines.launch
 
 

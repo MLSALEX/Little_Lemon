@@ -13,10 +13,9 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material3.DrawerState
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,8 +30,6 @@ import com.example.lttle_lemon_app.CartScreen
 import com.example.lttle_lemon_app.Home
 import com.example.lttle_lemon_app.R
 import com.example.lttle_lemon_app.ui.theme.LLColor
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 
 @Composable
 fun TopAppBar(
@@ -52,8 +49,8 @@ fun TopAppBar(
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier
             .fillMaxWidth()
-            .height(56.dp) // Оптимальная высота для TopAppBar
-            .padding(horizontal = 16.dp), // Уменьшение padding
+            .height(56.dp)
+            .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         if (showMenuButton) {
@@ -90,7 +87,7 @@ fun TopAppBar(
         }
         if (showCart) {
             Box(contentAlignment = Alignment.TopEnd) {
-                IconButton(onClick = { navController.navigate(CartScreen.route) }) {
+                IconButton(onClick = {navController.navigate(CartScreen.route)}) {
                     Image(
                         painter = painterResource(id = R.drawable.ic_cart),
                         contentDescription = "Cart",
@@ -110,7 +107,7 @@ fun TopAppBar(
                         Text(
                             text = "+1",
                             color = Color.White,
-                            style = MaterialTheme.typography.caption,
+                            style = MaterialTheme.typography.bodySmall,
                         )
                     }
                 }

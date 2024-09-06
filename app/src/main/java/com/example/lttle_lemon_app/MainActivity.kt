@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.rememberNavController
 import androidx.room.Room
+import com.example.lttle_lemon_app.components.MyDrawer
 import com.example.lttle_lemon_app.ui.theme.Lttle_Lemon_appTheme
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body

@@ -1,11 +1,9 @@
-package com.example.lttle_lemon_app
+package com.example.lttle_lemon_app.screens.cartScreen
 
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -13,7 +11,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Divider
 import androidx.compose.material3.Button
-import androidx.compose.material3.DrawerState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -31,8 +28,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.example.lttle_lemon_app.R
 import com.example.lttle_lemon_app.components.TopAppBar
-import kotlinx.coroutines.CoroutineScope
 
 @Composable
 fun CartScreen(
@@ -41,12 +38,12 @@ fun CartScreen(
     openDrawer:() -> Unit
 ) {
     val cartItems by cartViewModel.cartItems.collectAsState()
-    val totalAmount = cartViewModel.getTotalAmount()
+    val totalAmount by cartViewModel.totalAmount.collectAsState()
 
-    var isAnimating by remember { mutableStateOf(false) }
-
-    Column(modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.SpaceBetween) {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.SpaceBetween
+    ) {
         TopAppBar(
             navController = navController,
             openDrawer = openDrawer
@@ -55,9 +52,10 @@ fun CartScreen(
         Box {
             LazyColumn() {
                 items(cartItems) { cartItem ->
-                    CartItemRow(cartItem = cartItem, onIncrease = {
+                    CartItemRow(
+                        cartItem = cartItem,
+                        onIncrease = {
                         cartViewModel.addItemToCart(cartItem.menuItem, 1)
-                        isAnimating = true
                     }, onDecrease = {
                         cartViewModel.removeItemFromCart(cartItem.menuItem)
                     })
@@ -96,7 +94,6 @@ fun CartItemRow(cartItem: CartItem, onIncrease: () -> Unit, onDecrease: () -> Un
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-
         Text(
             text = cartItem.menuItem.title,
             style = MaterialTheme.typography.bodyLarge
