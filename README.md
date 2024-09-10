@@ -14,7 +14,7 @@ The project consists of multiple screens such as Home, Profile, Onboarding, and 
 
 - **Home Screen (Home.kt)**: Displays the main content of the application with a list of items. Each item is represented by a card, which navigates to the detailed view upon selection.
 - **Profile Screen (Profile.kt)**: Showcases the user’s profile information. This screen demonstrates the handling of user data and UI state management.
-- **Onboarding Screen (Onboarding.kt)**: Guides new users through the key features of the app.
+- **Onboarding Screen (Onboarding.kt)**: Allows new users to sign up by entering personal information such as their name and email.
 - **Menu Item Details Screen (MenuItemDetails.kt)**: Provides detailed information about a selected item from the home screen. This screen highlights the effective use of arguments in navigation to pass data between screens.
 
 ## Dependencies
