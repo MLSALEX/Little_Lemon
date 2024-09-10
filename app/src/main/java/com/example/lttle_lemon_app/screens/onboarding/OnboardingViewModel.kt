@@ -3,11 +3,14 @@ package com.example.lttle_lemon_app.screens.onboarding
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.example.lttle_lemon_app.Home
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 data class OnboardingUiState(
     val firstName: String = "",
@@ -61,12 +64,23 @@ class OnboardingViewModel(private val sharedPreferences: SharedPreferences) : Vi
                     putString("email", _uiState.value.email)
                     putBoolean("loggedIn", true)
                 }
-                navController.navigate(Home.route)
                 _uiState.value = _uiState.value.copy(
                     message = "Registration successful!",
                     showMessage = true
                 )
+
+                viewModelScope.launch {
+                    delay(2000)
+                    navController.navigate(Home.route)
+                    resetShowMessage()
+                }
             }
+        }
+    }
+    private fun resetShowMessage() {
+        viewModelScope.launch {
+            delay(3000)
+            _uiState.value = _uiState.value.copy(showMessage = false)
         }
     }
 }

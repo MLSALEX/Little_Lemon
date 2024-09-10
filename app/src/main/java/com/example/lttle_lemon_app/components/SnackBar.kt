@@ -10,7 +10,7 @@ import androidx.compose.runtime.remember
 @Composable
 fun SnackBar(message: String) {
     val snackbarHostState = remember { SnackbarHostState() }
-    LaunchedEffect(Unit) {
+    LaunchedEffect(message) {
         snackbarHostState.showSnackbar(message, duration = SnackbarDuration.Long)
     }
     SnackbarHost(hostState = snackbarHostState)
