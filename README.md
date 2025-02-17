@@ -1,6 +1,6 @@
 # Project Overview
 
-This project was developed as a part of the Android Developer course by Meta. It demonstrates the implementation of various Android development techniques, including Jetpack Compose for UI and efficient navigation handling.
+This project demonstrates the implementation of various Android development techniques, including Jetpack Compose for UI and efficient navigation handling.
 
 The project consists of multiple screens such as Home, Profile, Onboarding, and Menu Item Details, each showcasing different aspects of Android app development.
 
