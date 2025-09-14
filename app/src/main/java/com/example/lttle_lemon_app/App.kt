@@ -1,7 +1,7 @@
 package com.example.lttle_lemon_app
 
 import android.app.Application
-import com.example.lttle_lemon_app.di.appModule
+import com.example.lttle_lemon_app.core.di.appModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 

@@ -22,14 +22,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
-import com.example.lttle_lemon_app.AppDatabase
 import com.example.lttle_lemon_app.Navigation
 import com.example.lttle_lemon_app.R
 import kotlinx.coroutines.launch
 
 
 @Composable
-fun MyDrawer(navController: NavHostController, database: AppDatabase) {
+fun MyDrawer(navController: NavHostController) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
@@ -58,7 +57,6 @@ fun MyDrawer(navController: NavHostController, database: AppDatabase) {
                 Box(modifier = Modifier.padding(innerPadding)) {
                     Navigation(
                         navController = navController,
-                        database = database,
                         openDrawer = openDrawer
                     )
                 }

@@ -37,7 +37,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             Lttle_Lemon_appTheme {
                 val navController = rememberNavController()
-                MyDrawer(navController = navController, database = database)
+                MyDrawer(navController = navController)
             }
         }
         lifecycleScope.launch(Dispatchers.IO) {

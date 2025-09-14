@@ -1,6 +1,5 @@
 package com.example.lttle_lemon_app.screens.home
 
-import android.content.SharedPreferences
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -31,16 +30,11 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -49,27 +43,23 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
-import com.example.lttle_lemon_app.AppDatabase
 import com.example.lttle_lemon_app.MenuItemDetails
 import com.example.lttle_lemon_app.MenuItemRoom
 import com.example.lttle_lemon_app.Profile
 import com.example.lttle_lemon_app.R
 import com.example.lttle_lemon_app.components.TopAppBar
 import com.example.lttle_lemon_app.ui.theme.LLColor
-import com.example.lttle_lemon_app.viewModelFactory.AppViewModelFactory
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun Home(
     navController: NavHostController,
-    database: AppDatabase,
-    sharedPreferences: SharedPreferences,
-    openDrawer:() -> Unit
+    openDrawer:() -> Unit,
+    viewModel: HomeViewModel = koinViewModel()
 ) {
-    val viewModel: HomeViewModel = viewModel(factory = AppViewModelFactory(sharedPreferences, database))
     val uiState by viewModel.uiState.collectAsState()
     val focusManager = LocalFocusManager.current
 

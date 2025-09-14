@@ -21,18 +21,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.lttle_lemon_app.components.LogButton
 import com.example.lttle_lemon_app.components.SnackBar
 import com.example.lttle_lemon_app.components.TopAppBar
+import org.koin.androidx.compose.koinViewModel
 
 
 @Composable
 fun Onboarding(
     navController: NavHostController,
-    onboardingViewModel: OnboardingViewModel = viewModel(),
-    openDrawer: () -> Unit
+    openDrawer: () -> Unit,
+    onboardingViewModel: OnboardingViewModel = koinViewModel(),
 ) {
     val uiState by onboardingViewModel.uiState.collectAsState()
 

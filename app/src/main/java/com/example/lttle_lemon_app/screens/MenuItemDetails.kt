@@ -1,7 +1,5 @@
 package com.example.lttle_lemon_app.screens
 
-import android.content.Context
-import android.content.SharedPreferences
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.Arrangement
@@ -16,45 +14,34 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
-import com.example.lttle_lemon_app.AppDatabase
 import com.example.lttle_lemon_app.MenuItemDao
 import com.example.lttle_lemon_app.R
-import com.example.lttle_lemon_app.screens.cartScreen.CartViewModel
 import com.example.lttle_lemon_app.components.TopAppBar
-import com.example.lttle_lemon_app.screens.home.HomeViewModel
-import com.example.lttle_lemon_app.viewModelFactory.AppViewModelFactory
-import kotlinx.coroutines.delay
+import com.example.lttle_lemon_app.screens.cartScreen.CartViewModel
+import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.koinInject
 
 @OptIn(ExperimentalGlideComposeApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun MenuItemDetails(
     navController: NavHostController,
     id: Int,
-    menuItemDao: MenuItemDao,
-    cartViewModel: CartViewModel = viewModel(),
-    openDrawer:() -> Unit
+    menuItemDao: MenuItemDao = koinInject(),
+    openDrawer:() -> Unit,
+    cartViewModel: CartViewModel = koinViewModel()
 ) {
-
     val menuItems by menuItemDao.getAll().observeAsState(initial = emptyList())
     val uiState by cartViewModel.uiState.collectAsState()
     val dish = menuItems.find { it.id == id }

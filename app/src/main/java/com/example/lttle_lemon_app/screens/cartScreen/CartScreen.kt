@@ -1,5 +1,6 @@
 package com.example.lttle_lemon_app.screens.cartScreen
 
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,25 +19,24 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.lttle_lemon_app.R
 import com.example.lttle_lemon_app.components.TopAppBar
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun CartScreen(
     navController: NavHostController,
-    cartViewModel: CartViewModel = viewModel(),
-    openDrawer:() -> Unit
+    openDrawer:() -> Unit,
 ) {
+    val activity = LocalContext.current as ComponentActivity
+    val cartViewModel: CartViewModel = koinViewModel(viewModelStoreOwner = activity)
     val cartItems by cartViewModel.cartItems.collectAsState()
     val totalAmount by cartViewModel.totalAmount.collectAsState()
 

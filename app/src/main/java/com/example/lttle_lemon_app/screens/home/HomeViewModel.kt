@@ -1,6 +1,5 @@
 package com.example.lttle_lemon_app.screens.home
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
@@ -12,12 +11,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 
-data class HomeUiState(
-    val searchPhrase: String = "",
-    val selectedCategory: String = "",
-    val menuItems: List<MenuItemRoom> = emptyList(),
-    val allMenuItems: List<MenuItemRoom> = emptyList()
-)
 class HomeViewModel(private val database: AppDatabase) : ViewModel() {
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> get() = _uiState
