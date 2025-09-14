@@ -10,6 +10,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -17,7 +18,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
 import com.example.lttle_lemon_app.R
 import com.example.lttle_lemon_app.components.LogButton
 import com.example.lttle_lemon_app.components.TopAppBar
@@ -25,11 +25,15 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun Profile(
-    navController: NavHostController,
     openDrawer: () -> Unit,
+    onLogout: () -> Unit,
     profileViewModel: ProfileViewModel = koinViewModel()
 ) {
     val uiState by profileViewModel.uiState.collectAsState()
+
+    LaunchedEffect(uiState.isLoggedOut) {
+        if (uiState.isLoggedOut) onLogout()
+    }
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -37,8 +41,10 @@ fun Profile(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         TopAppBar(
-            navController = navController,
-            openDrawer = openDrawer
+            onMenuClick = openDrawer,
+            showProfileImage = false,
+            showCart = false,
+            showLogo = true
         )
         Image(
             painter = painterResource(id = R.drawable.profile),
@@ -62,7 +68,7 @@ fun Profile(
             }
         }
         LogButton("Log out") {
-            profileViewModel.logOut(navController)
+            profileViewModel.logOut()
         }
     }
 }

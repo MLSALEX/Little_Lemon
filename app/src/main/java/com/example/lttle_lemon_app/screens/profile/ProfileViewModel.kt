@@ -3,19 +3,22 @@ package com.example.lttle_lemon_app.screens.profile
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import androidx.lifecycle.ViewModel
-import androidx.navigation.NavHostController
-import com.example.lttle_lemon_app.Onboarding
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 
 data class ProfileUiState(
     val firstName: String = "",
     val lastName: String = "",
-    val email: String = ""
+    val email: String = "",
+    val isLoggedOut: Boolean = false
 )
 
-class ProfileViewModel (private val sharedPreferences:SharedPreferences) : ViewModel(){
+
+class ProfileViewModel (
+    private val sharedPreferences:SharedPreferences
+) : ViewModel(){
 
     private val _uiState = MutableStateFlow(ProfileUiState())
     val uiState: StateFlow<ProfileUiState> = _uiState.asStateFlow()
@@ -32,10 +35,9 @@ class ProfileViewModel (private val sharedPreferences:SharedPreferences) : ViewM
         _uiState.value = ProfileUiState(firstName = firstName, lastName = lastName, email = email)
     }
 
-    fun logOut(navController: NavHostController) {
+
+    fun logOut() {
         sharedPreferences.edit { clear() }
-        navController.navigate(Onboarding.route){
-            popUpTo(0) { inclusive = true }
-        }
+        _uiState.update { it.copy(isLoggedOut = true) }
     }
 }

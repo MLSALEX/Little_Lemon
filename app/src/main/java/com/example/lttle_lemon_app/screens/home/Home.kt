@@ -43,12 +43,9 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
-import com.example.lttle_lemon_app.MenuItemDetails
 import com.example.lttle_lemon_app.MenuItemRoom
-import com.example.lttle_lemon_app.Profile
 import com.example.lttle_lemon_app.R
 import com.example.lttle_lemon_app.components.TopAppBar
 import com.example.lttle_lemon_app.ui.theme.LLColor
@@ -56,14 +53,14 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun Home(
-    navController: NavHostController,
-    openDrawer:() -> Unit,
+    openDrawer: () -> Unit,
+    onNavigateProfile: () -> Unit,
+    onNavigateCart: () -> Unit,
+    onOpenDish: (Int) -> Unit,
     viewModel: HomeViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val focusManager = LocalFocusManager.current
-
-    // General state for categories and selected category
     val categories = listOf("Starters", "Mains", "Desserts", "Drinks", "Remove Filter")
 
     Column(
@@ -72,10 +69,13 @@ fun Home(
         verticalArrangement = Arrangement.Top
     ) {
         TopAppBar(
-            navController = navController,
+            onMenuClick = openDrawer,
+            showLogo = true,
+            logoClickable = false,
+            onLogoClick = null,
             showProfileImage = true,
-            onProfileClick = { navController.navigate(Profile.route) },
-            openDrawer = openDrawer
+            onProfileClick = onNavigateProfile,
+            showCart = false,
         )
         UpperPanel(
             searchPhrase = uiState.searchPhrase,
@@ -85,7 +85,7 @@ fun Home(
             categories = categories,
             onCategorySelected = { viewModel.onCategorySelected(it) },
             menuItems = uiState.menuItems,
-            navController = navController
+            onOpenDish = onOpenDish
         )
     }
 }
@@ -158,7 +158,7 @@ fun LowerPanel(
     categories: List<String>,
     onCategorySelected: (String) -> Unit,
     menuItems: List<MenuItemRoom>,
-    navController: NavHostController
+    onOpenDish: (Int) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -204,7 +204,7 @@ fun LowerPanel(
         ) {
             items(menuItems) { menuItem ->
                 MenuItemCard(menuItem = menuItem) {
-                    navController.navigate("${MenuItemDetails.route}/${menuItem.id}")
+                    onOpenDish(menuItem.id)
                 }
             }
         }

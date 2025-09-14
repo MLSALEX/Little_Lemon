@@ -23,7 +23,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.example.lttle_lemon_app.MenuItemDao
@@ -36,10 +35,11 @@ import org.koin.compose.koinInject
 @OptIn(ExperimentalGlideComposeApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun MenuItemDetails(
-    navController: NavHostController,
     id: Int,
+    openDrawer: () -> Unit,
+    onBack: () -> Unit,
+    onOpenCart: () -> Unit,
     menuItemDao: MenuItemDao = koinInject(),
-    openDrawer:() -> Unit,
     cartViewModel: CartViewModel = koinViewModel()
 ) {
     val menuItems by menuItemDao.getAll().observeAsState(initial = emptyList())
@@ -55,12 +55,14 @@ fun MenuItemDetails(
 
     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
         TopAppBar(
-            navController = navController,
+            onMenuClick = openDrawer,
+            showLogo = true,
+            showProfileImage = false,
             showCart = true,
+            onCartClick = onOpenCart,
             cartScale = scale,
             showBadge = uiState.showBadge,
-            badgeOffset = badgeOffset,
-            openDrawer = openDrawer
+            badgeOffset = badgeOffset
         )
         GlideImage(
             model = dish.image,

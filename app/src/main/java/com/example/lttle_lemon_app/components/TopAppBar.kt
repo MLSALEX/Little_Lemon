@@ -25,16 +25,12 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
-import com.example.lttle_lemon_app.CartScreen
-import com.example.lttle_lemon_app.Home
 import com.example.lttle_lemon_app.R
 import com.example.lttle_lemon_app.ui.theme.LLColor
 
 @Composable
 fun TopAppBar(
-    navController: NavHostController,
-    openDrawer: () -> Unit,
+    onMenuClick: () -> Unit,
     showMenuButton: Boolean = true,
     showLogo: Boolean = true,
     logoClickable: Boolean = true,
@@ -43,7 +39,9 @@ fun TopAppBar(
     cartScale: Float = 1f,
     showBadge: Boolean = false,
     badgeOffset: Dp = 0.dp,
-    onProfileClick: () -> Unit = {}
+    onProfileClick: () -> Unit = {},
+    onLogoClick: (() -> Unit)? = {},
+    onCartClick: () -> Unit = {}
 ) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -54,7 +52,7 @@ fun TopAppBar(
         verticalAlignment = Alignment.CenterVertically
     ) {
         if (showMenuButton) {
-            IconButton(onClick = openDrawer) {
+            IconButton(onClick = onMenuClick) {
                 Image(
                     painter = painterResource(id = R.drawable.ic_hamburger_menu),
                     contentDescription = "Menu Icon",
@@ -70,7 +68,7 @@ fun TopAppBar(
                 modifier = Modifier
                     .padding(horizontal = 20.dp)
                     .clickable(enabled = logoClickable) {
-                        navController.navigate(Home.route)
+                        onLogoClick?.invoke()
                     },
                 contentScale = ContentScale.Inside
             )
@@ -87,7 +85,7 @@ fun TopAppBar(
         }
         if (showCart) {
             Box(contentAlignment = Alignment.TopEnd) {
-                IconButton(onClick = {navController.navigate(CartScreen.route)}) {
+                IconButton(onClick = onCartClick) {
                     Image(
                         painter = painterResource(id = R.drawable.ic_cart),
                         contentDescription = "Cart",

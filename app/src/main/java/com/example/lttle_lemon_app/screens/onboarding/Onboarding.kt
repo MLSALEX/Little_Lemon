@@ -13,6 +13,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -21,7 +22,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
 import com.example.lttle_lemon_app.components.LogButton
 import com.example.lttle_lemon_app.components.SnackBar
 import com.example.lttle_lemon_app.components.TopAppBar
@@ -30,11 +30,15 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun Onboarding(
-    navController: NavHostController,
+    onFinish: () -> Unit,
     openDrawer: () -> Unit,
     onboardingViewModel: OnboardingViewModel = koinViewModel(),
 ) {
     val uiState by onboardingViewModel.uiState.collectAsState()
+
+    LaunchedEffect(uiState.isRegistered) {
+        if (uiState.isRegistered) onFinish()
+    }
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -42,11 +46,10 @@ fun Onboarding(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         TopAppBar(
-            navController = navController,
             logoClickable = false,
             showProfileImage = false,
             showMenuButton = false,
-            openDrawer = openDrawer
+            onMenuClick = openDrawer
         )
 
         Column(
@@ -86,11 +89,11 @@ fun Onboarding(
             }
 
             LogButton("Register") {
-                onboardingViewModel.onRegister(navController)
+                onboardingViewModel.onRegister()
             }
 
             if (uiState.showMessage) {
-                SnackBar(message = uiState.message)
+                SnackBar(message = uiState.message!!)
             }
         }
     }
@@ -113,12 +116,4 @@ fun CustomOutlinedTextField(
         keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
         keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done)
     )
-}
-
-fun isValidEmail(email: String): Boolean {
-    return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
-}
-
-fun isValidName(name: String): Boolean {
-    return name.isNotBlank() && name.length >= 2
 }

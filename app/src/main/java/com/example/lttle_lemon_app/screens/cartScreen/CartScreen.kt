@@ -25,28 +25,36 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
 import com.example.lttle_lemon_app.R
 import com.example.lttle_lemon_app.components.TopAppBar
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun CartScreen(
-    navController: NavHostController,
-    openDrawer:() -> Unit,
+    openDrawer: () -> Unit,
+    onBack: () -> Unit,
+    onCheckout: () -> Unit,
 ) {
     val activity = LocalContext.current as ComponentActivity
     val cartViewModel: CartViewModel = koinViewModel(viewModelStoreOwner = activity)
     val cartItems by cartViewModel.cartItems.collectAsState()
     val totalAmount by cartViewModel.totalAmount.collectAsState()
+    val uiState by cartViewModel.uiState.collectAsState()
 
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
         TopAppBar(
-            navController = navController,
-            openDrawer = openDrawer
+            onMenuClick = openDrawer,
+            showMenuButton = true,
+            showLogo = true,
+            logoClickable = true,
+            showProfileImage = false,
+            showCart = true,
+            onCartClick = {},
+            cartScale = if (uiState.isAnimating) 1.15f else 1f,
+            showBadge = uiState.showBadge
         )
 
         Box {
@@ -75,7 +83,7 @@ fun CartScreen(
         )
 
         Button(
-            onClick = { /* TODO: Implement checkout logic */ },
+            onClick = onCheckout,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
