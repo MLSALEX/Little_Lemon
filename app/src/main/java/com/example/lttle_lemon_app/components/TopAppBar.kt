@@ -1,115 +1,138 @@
 package com.example.lttle_lemon_app.components
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.lttle_lemon_app.R
-import com.example.lttle_lemon_app.ui.theme.LLColor
 
-@Composable
-fun TopAppBar(
-    onMenuClick: () -> Unit,
-    showMenuButton: Boolean = true,
-    showLogo: Boolean = true,
-    logoClickable: Boolean = true,
-    showProfileImage: Boolean = false,
-    showCart: Boolean = false,
-    cartScale: Float = 1f,
-    showBadge: Boolean = false,
-    badgeOffset: Dp = 0.dp,
-    onProfileClick: () -> Unit = {},
-    onLogoClick: (() -> Unit)? = {},
-    onCartClick: () -> Unit = {}
+
+@Immutable
+data class TopBarState(
+    val nav: NavIcon = NavIcon.Menu,   // Menu | Back | None
+    val showCart: Boolean = false,
+    val cartCount: Int = 0,
+    val cartScale: Float = 1f,
+    val badgeOffsetY: Dp = 0.dp
 ) {
-    Row(
-        horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(56.dp)
-            .padding(horizontal = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        if (showMenuButton) {
-            IconButton(onClick = onMenuClick) {
+    val hasBadge: Boolean get() = showCart && cartCount > 0
+    val badgeText: String get() = if (cartCount > 99) "99+" else cartCount.toString()
+}
+
+enum class NavIcon { None, Menu, Back }
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TopBar(
+    state: TopBarState,
+    onMenuClick: () -> Unit,
+    onBackClick: () -> Unit,
+    onLogoClick: () -> Unit,
+    onCartClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    // Keep callbacks stable
+    val menuCb by rememberUpdatedState(onMenuClick)
+    val backCb by rememberUpdatedState(onBackClick)
+    val logoCb by rememberUpdatedState(onLogoClick)
+    val cartCb by rememberUpdatedState(onCartClick)
+
+    CenterAlignedTopAppBar(
+        navigationIcon = {
+            when (state.nav) {
+                NavIcon.Menu -> IconButton(
+                    onClick = menuCb,
+                    modifier = Modifier.size(48.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Menu,
+                        contentDescription = "Open menu",
+                        modifier = Modifier.size(24.dp),
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                }
+                NavIcon.Back -> IconButton(
+                    onClick = backCb,
+                    modifier = Modifier.size(48.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "Back",
+                        modifier = Modifier.size(24.dp),
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                }
+                NavIcon.None -> Unit
+            }
+        },
+        title = {
+            Box(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .padding(horizontal = 8.dp)
+                    .clickable(onClick = logoCb),
+                contentAlignment = Alignment.Center
+            ) {
                 Image(
-                    painter = painterResource(id = R.drawable.ic_hamburger_menu),
-                    contentDescription = "Menu Icon",
-                    modifier = Modifier.size(24.dp)
+                    painter = painterResource(R.drawable.littlelemonimgtxt_nobg),
+                    contentDescription = "Little Lemon",
+                    contentScale = ContentScale.Inside,
+                    modifier = Modifier
+                        .height(36.dp)
+                )
+            }
+        },
+        actions = {
+            if (state.showCart) {
+                CartIconWithBadge(
+                    onClick = cartCb,
+                    badgeVisible = state.hasBadge,
+                    badgeLabel = state.badgeText,
+                    scale = state.cartScale,
+                    badgeXOffset = (1).dp,
+                    badgeYOffset = (3).dp + state.badgeOffsetY,
+                    tint = MaterialTheme.colorScheme.primary,
+                    badgeColor = MaterialTheme.colorScheme.primary
                 )
             }
         }
-        Spacer(modifier = Modifier.weight(1f))
-        if (showLogo) {
-            Image(
-                painter = painterResource(id = R.drawable.littlelemonimgtxt_nobg),
-                contentDescription = "Little Lemon Logo",
-                modifier = Modifier
-                    .padding(horizontal = 20.dp)
-                    .clickable(enabled = logoClickable) {
-                        onLogoClick?.invoke()
-                    },
-                contentScale = ContentScale.Inside
-            )
-        }
-        Spacer(modifier = Modifier.weight(1f))
-        if (showProfileImage) {
-            Image(
-                painter = painterResource(id = R.drawable.profile),
-                contentDescription = "Profile Image",
-                modifier = Modifier
-                    .size(40.dp)
-                    .clickable { onProfileClick() }
-            )
-        }
-        if (showCart) {
-            Box(contentAlignment = Alignment.TopEnd) {
-                IconButton(onClick = onCartClick) {
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_cart),
-                        contentDescription = "Cart",
-                        modifier = Modifier
-                            .size(24.dp)
-                            .scale(cartScale)
-                    )
-                }
-                if (showBadge) {
-                    Box(
-                        modifier = Modifier
-                            .offset(x = (-10).dp, y = badgeOffset)
-                            .size(20.dp)
-                            .background(LLColor.green, shape = CircleShape),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = "+1",
-                            color = Color.White,
-                            style = MaterialTheme.typography.bodySmall,
-                        )
-                    }
-                }
-            }
-        }
-    }
+    )
 }
+
+fun homeTopBar(cartCount: Int) = TopBarState(
+    nav = NavIcon.Menu, showCart = true, cartCount = cartCount
+)
+
+val onboardingTopBar = TopBarState(
+    nav = NavIcon.None, showCart = false
+)
+
+val profileTopBar = TopBarState(
+    nav = NavIcon.Menu, showCart = false
+)
+
+fun detailsTopBar(cartCount: Int, scale: Float = 1f) = TopBarState(
+    nav = NavIcon.Back, showCart = true, cartCount = cartCount, cartScale = scale
+)

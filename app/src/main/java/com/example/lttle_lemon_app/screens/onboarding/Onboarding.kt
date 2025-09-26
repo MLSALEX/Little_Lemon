@@ -24,7 +24,8 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.example.lttle_lemon_app.components.LogButton
 import com.example.lttle_lemon_app.components.SnackBar
-import com.example.lttle_lemon_app.components.TopAppBar
+import com.example.lttle_lemon_app.components.TopBar
+import com.example.lttle_lemon_app.components.onboardingTopBar
 import org.koin.androidx.compose.koinViewModel
 
 
@@ -32,6 +33,7 @@ import org.koin.androidx.compose.koinViewModel
 fun Onboarding(
     onFinish: () -> Unit,
     openDrawer: () -> Unit,
+    onLogoClick: () -> Unit,
     onboardingViewModel: OnboardingViewModel = koinViewModel(),
 ) {
     val uiState by onboardingViewModel.uiState.collectAsState()
@@ -45,11 +47,12 @@ fun Onboarding(
         verticalArrangement = Arrangement.spacedBy(50.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        TopAppBar(
-            logoClickable = false,
-            showProfileImage = false,
-            showMenuButton = false,
-            onMenuClick = openDrawer
+        TopBar(
+            state = onboardingTopBar,
+            onMenuClick = {},
+            onBackClick = {},
+            onLogoClick = onLogoClick,
+            onCartClick = {}
         )
 
         Column(

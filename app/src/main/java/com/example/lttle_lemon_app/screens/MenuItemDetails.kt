@@ -27,7 +27,8 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.example.lttle_lemon_app.MenuItemDao
 import com.example.lttle_lemon_app.R
-import com.example.lttle_lemon_app.components.TopAppBar
+import com.example.lttle_lemon_app.components.TopBar
+import com.example.lttle_lemon_app.components.detailsTopBar
 import com.example.lttle_lemon_app.screens.cartScreen.CartViewModel
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
@@ -39,8 +40,10 @@ fun MenuItemDetails(
     openDrawer: () -> Unit,
     onBack: () -> Unit,
     onOpenCart: () -> Unit,
+    cartCount: Int,
     menuItemDao: MenuItemDao = koinInject(),
-    cartViewModel: CartViewModel = koinViewModel()
+    cartViewModel: CartViewModel = koinViewModel(),
+    onLogoClick: () -> Unit,
 ) {
     val menuItems by menuItemDao.getAll().observeAsState(initial = emptyList())
     val uiState by cartViewModel.uiState.collectAsState()
@@ -51,18 +54,14 @@ fun MenuItemDetails(
         return
     }
     val scale by animateFloatAsState(targetValue = if (uiState.isAnimating) 1.5f else 1f, label = "")
-    val badgeOffset by animateDpAsState(targetValue = if (uiState.showBadge) 0.dp else (-20).dp)
 
     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-        TopAppBar(
+        TopBar(
+            state = detailsTopBar(cartCount, scale = scale),
             onMenuClick = openDrawer,
-            showLogo = true,
-            showProfileImage = false,
-            showCart = true,
-            onCartClick = onOpenCart,
-            cartScale = scale,
-            showBadge = uiState.showBadge,
-            badgeOffset = badgeOffset
+            onBackClick = onBack,
+            onLogoClick = onLogoClick,
+            onCartClick = onOpenCart
         )
         GlideImage(
             model = dish.image,

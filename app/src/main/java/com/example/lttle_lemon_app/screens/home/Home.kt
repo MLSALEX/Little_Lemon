@@ -47,17 +47,19 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.example.lttle_lemon_app.MenuItemRoom
 import com.example.lttle_lemon_app.R
-import com.example.lttle_lemon_app.components.TopAppBar
+import com.example.lttle_lemon_app.components.TopBar
+import com.example.lttle_lemon_app.components.homeTopBar
 import com.example.lttle_lemon_app.ui.theme.LLColor
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun Home(
     openDrawer: () -> Unit,
-    onNavigateProfile: () -> Unit,
     onNavigateCart: () -> Unit,
     onOpenDish: (Int) -> Unit,
-    viewModel: HomeViewModel = koinViewModel()
+    cartCount: Int,
+    viewModel: HomeViewModel = koinViewModel(),
+    onLogoClick: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val focusManager = LocalFocusManager.current
@@ -68,14 +70,12 @@ fun Home(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
-        TopAppBar(
+        TopBar(
+            state = homeTopBar(cartCount),
             onMenuClick = openDrawer,
-            showLogo = true,
-            logoClickable = false,
-            onLogoClick = null,
-            showProfileImage = true,
-            onProfileClick = onNavigateProfile,
-            showCart = false,
+            onBackClick = {},
+            onLogoClick = onLogoClick,
+            onCartClick = onNavigateCart
         )
         UpperPanel(
             searchPhrase = uiState.searchPhrase,

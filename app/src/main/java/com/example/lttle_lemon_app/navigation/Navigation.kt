@@ -4,6 +4,7 @@ package com.example.lttle_lemon_app.navigation
 import android.content.SharedPreferences
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -18,10 +19,12 @@ import org.koin.compose.koinInject
 @Composable
 fun Navigation(
     navController: NavHostController,
-    openDrawer:() -> Unit
+    openDrawer:() -> Unit,
+    cartCount: Int
 ) {
     val prefs: SharedPreferences = koinInject()
     val isLoggedIn = prefs.getBoolean("loggedIn", false)
+
 
     val start: NavigationRoute = if (isLoggedIn) {
         NavigationRoute.Home
@@ -29,27 +32,38 @@ fun Navigation(
         NavigationRoute.Onboarding
     }
 
+    val goHome = remember(navController) {
+        {
+            val popped = navController.popBackStack(
+                route = NavigationRoute.Home,
+                inclusive = false
+            )
+            if (!popped) {
+                navController.navigate(NavigationRoute.Home) {
+                    launchSingleTop = true
+                }
+            }
+        }
+    }
+
     NavHost(
         navController = navController,
         startDestination = start
     ) {
         composable<NavigationRoute.Onboarding> {
-            val goToHome = remember(navController) {
-                { navController.navigate(NavigationRoute.Home) {
-                    popUpTo(navController.graph.id) { inclusive = true }
-                } }
-            }
             Onboarding(
-                onFinish = goToHome,
-                openDrawer = openDrawer
+                onFinish = goHome,
+                openDrawer = openDrawer,
+                onLogoClick = goHome
             )
         }
         composable<NavigationRoute.Home> {
             Home(
                 openDrawer = openDrawer,
                 onNavigateCart = { navController.navigate(NavigationRoute.Cart) },
-                onNavigateProfile = { navController.navigate(NavigationRoute.Profile) },
-                onOpenDish = { id -> navController.navigate(NavigationRoute.MenuItemDetails(id)) }
+                onOpenDish = { id -> navController.navigate(NavigationRoute.MenuItemDetails(id)) },
+                cartCount = cartCount,
+                onLogoClick = goHome
             )
         }
         composable<NavigationRoute.Profile> {
@@ -59,14 +73,16 @@ fun Navigation(
                     navController.navigate(NavigationRoute.Onboarding) {
                         popUpTo(navController.graph.id) { inclusive = true }
                     }
-                }
+                },
+                onLogoClick = goHome
             )
         }
         composable<NavigationRoute.Cart> {
             CartScreen(
                 openDrawer = openDrawer,
                 onBack = { navController.navigateUp() },
-                onCheckout = { }
+                onCheckout = { },
+                onLogoClick = goHome
             )
         }
         composable<NavigationRoute.MenuItemDetails> { entry ->
@@ -75,7 +91,9 @@ fun Navigation(
                 id = args.dishId,
                 openDrawer = openDrawer,
                 onBack = { navController.navigateUp() },
-                onOpenCart = { navController.navigate(NavigationRoute.Cart) }
+                onOpenCart = { navController.navigate(NavigationRoute.Cart) },
+                cartCount = cartCount,
+                onLogoClick = goHome
             )
         }
     }
