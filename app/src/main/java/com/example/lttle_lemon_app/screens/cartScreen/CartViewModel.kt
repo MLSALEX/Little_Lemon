@@ -16,6 +16,7 @@ import kotlinx.coroutines.launch
 class CartViewModel(
     private val repo: CartRepository
 ) : ViewModel() {
+
     val cartItems: StateFlow<List<CartItem>> =
         repo.observeCart()
             .stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
@@ -24,6 +25,11 @@ class CartViewModel(
         cartItems
             .map { items -> items.sumOf { it.menuItem.price * it.quantity } }
             .stateIn(viewModelScope, SharingStarted.Eagerly, 0.0)
+
+    val cartCount: StateFlow<Int> =
+        cartItems
+            .map { items -> items.sumOf { it.quantity } }
+            .stateIn(viewModelScope, SharingStarted.Eagerly, 0)
 
     private val _uiState = MutableStateFlow(CartUiState())
     val uiState: StateFlow<CartUiState> = _uiState

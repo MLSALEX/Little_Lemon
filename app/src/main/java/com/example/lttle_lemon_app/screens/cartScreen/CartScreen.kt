@@ -26,35 +26,31 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.lttle_lemon_app.R
-import com.example.lttle_lemon_app.components.TopAppBar
+import com.example.lttle_lemon_app.components.NavIcon
+import com.example.lttle_lemon_app.components.TopBar
+import com.example.lttle_lemon_app.components.TopBarState
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun CartScreen(
     openDrawer: () -> Unit,
     onBack: () -> Unit,
-    onCheckout: () -> Unit,
+    onCheckout: () -> Unit
 ) {
     val activity = LocalContext.current as ComponentActivity
     val cartViewModel: CartViewModel = koinViewModel(viewModelStoreOwner = activity)
     val cartItems by cartViewModel.cartItems.collectAsState()
     val totalAmount by cartViewModel.totalAmount.collectAsState()
-    val uiState by cartViewModel.uiState.collectAsState()
 
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
-        TopAppBar(
+        TopBar(
+            state = TopBarState(nav = NavIcon.Back, showCart = false),
             onMenuClick = openDrawer,
-            showMenuButton = true,
-            showLogo = true,
-            logoClickable = true,
-            showProfileImage = false,
-            showCart = true,
-            onCartClick = {},
-            cartScale = if (uiState.isAnimating) 1.15f else 1f,
-            showBadge = uiState.showBadge
+            onBackClick = onBack,
+            onCartClick = {  }
         )
 
         Box {

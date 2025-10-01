@@ -20,7 +20,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.lttle_lemon_app.R
 import com.example.lttle_lemon_app.components.LogButton
-import com.example.lttle_lemon_app.components.TopAppBar
+import com.example.lttle_lemon_app.components.TopBar
+import com.example.lttle_lemon_app.components.profileTopBar
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -40,11 +41,11 @@ fun Profile(
         verticalArrangement = Arrangement.spacedBy(50.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        TopAppBar(
+        TopBar(
+            state = profileTopBar,
             onMenuClick = openDrawer,
-            showProfileImage = false,
-            showCart = false,
-            showLogo = true
+            onBackClick = {},
+            onCartClick = {}
         )
         Image(
             painter = painterResource(id = R.drawable.profile),
