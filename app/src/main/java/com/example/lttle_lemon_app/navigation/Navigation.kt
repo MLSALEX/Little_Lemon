@@ -10,7 +10,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.example.lttle_lemon_app.screens.MenuItemDetails
 import com.example.lttle_lemon_app.screens.cartScreen.CartScreen
-import com.example.lttle_lemon_app.screens.home.Home
+import com.example.lttle_lemon_app.screens.home.HomeRoute
 import com.example.lttle_lemon_app.screens.onboarding.Onboarding
 import com.example.lttle_lemon_app.screens.profile.Profile
 import org.koin.compose.koinInject
@@ -56,7 +56,7 @@ fun Navigation(
             )
         }
         composable<NavigationRoute.Home> {
-            Home(
+            HomeRoute(
                 openDrawer = openDrawer,
                 onNavigateCart = { navController.navigate(NavigationRoute.Cart) },
                 onOpenDish = { id -> navController.navigate(NavigationRoute.MenuItemDetails(id)) },
