@@ -33,7 +33,6 @@ import org.koin.androidx.compose.koinViewModel
 fun Onboarding(
     onFinish: () -> Unit,
     openDrawer: () -> Unit,
-    onLogoClick: () -> Unit,
     onboardingViewModel: OnboardingViewModel = koinViewModel(),
 ) {
     val uiState by onboardingViewModel.uiState.collectAsState()
@@ -51,7 +50,6 @@ fun Onboarding(
             state = onboardingTopBar,
             onMenuClick = {},
             onBackClick = {},
-            onLogoClick = onLogoClick,
             onCartClick = {}
         )
 

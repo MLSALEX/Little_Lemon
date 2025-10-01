@@ -35,8 +35,7 @@ import org.koin.androidx.compose.koinViewModel
 fun CartScreen(
     openDrawer: () -> Unit,
     onBack: () -> Unit,
-    onCheckout: () -> Unit,
-    onLogoClick: () -> Unit,
+    onCheckout: () -> Unit
 ) {
     val activity = LocalContext.current as ComponentActivity
     val cartViewModel: CartViewModel = koinViewModel(viewModelStoreOwner = activity)
@@ -51,7 +50,6 @@ fun CartScreen(
             state = TopBarState(nav = NavIcon.Back, showCart = false),
             onMenuClick = openDrawer,
             onBackClick = onBack,
-            onLogoClick = onLogoClick,
             onCartClick = {  }
         )
 

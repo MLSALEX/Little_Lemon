@@ -1,6 +1,5 @@
 package com.example.lttle_lemon_app.screens
 
-import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -43,7 +42,6 @@ fun MenuItemDetails(
     cartCount: Int,
     menuItemDao: MenuItemDao = koinInject(),
     cartViewModel: CartViewModel = koinViewModel(),
-    onLogoClick: () -> Unit,
 ) {
     val menuItems by menuItemDao.getAll().observeAsState(initial = emptyList())
     val uiState by cartViewModel.uiState.collectAsState()
@@ -60,7 +58,6 @@ fun MenuItemDetails(
             state = detailsTopBar(cartCount, scale = scale),
             onMenuClick = openDrawer,
             onBackClick = onBack,
-            onLogoClick = onLogoClick,
             onCartClick = onOpenCart
         )
         GlideImage(

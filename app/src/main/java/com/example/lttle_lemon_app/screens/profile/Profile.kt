@@ -28,7 +28,6 @@ import org.koin.androidx.compose.koinViewModel
 fun Profile(
     openDrawer: () -> Unit,
     onLogout: () -> Unit,
-    onLogoClick: () -> Unit,
     profileViewModel: ProfileViewModel = koinViewModel()
 ) {
     val uiState by profileViewModel.uiState.collectAsState()
@@ -46,7 +45,6 @@ fun Profile(
             state = profileTopBar,
             onMenuClick = openDrawer,
             onBackClick = {},
-            onLogoClick = onLogoClick,
             onCartClick = {}
         )
         Image(

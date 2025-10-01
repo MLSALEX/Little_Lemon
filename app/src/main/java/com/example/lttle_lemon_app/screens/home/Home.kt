@@ -59,7 +59,6 @@ fun Home(
     onOpenDish: (Int) -> Unit,
     cartCount: Int,
     viewModel: HomeViewModel = koinViewModel(),
-    onLogoClick: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val focusManager = LocalFocusManager.current
@@ -74,7 +73,6 @@ fun Home(
             state = homeTopBar(cartCount),
             onMenuClick = openDrawer,
             onBackClick = {},
-            onLogoClick = onLogoClick,
             onCartClick = onNavigateCart
         )
         UpperPanel(

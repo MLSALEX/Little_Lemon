@@ -1,7 +1,6 @@
 package com.example.lttle_lemon_app.components
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
@@ -49,14 +48,12 @@ fun TopBar(
     state: TopBarState,
     onMenuClick: () -> Unit,
     onBackClick: () -> Unit,
-    onLogoClick: () -> Unit,
     onCartClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     // Keep callbacks stable
     val menuCb by rememberUpdatedState(onMenuClick)
     val backCb by rememberUpdatedState(onBackClick)
-    val logoCb by rememberUpdatedState(onLogoClick)
     val cartCb by rememberUpdatedState(onCartClick)
 
     CenterAlignedTopAppBar(
@@ -91,8 +88,7 @@ fun TopBar(
             Box(
                 modifier = Modifier
                     .fillMaxHeight()
-                    .padding(horizontal = 8.dp)
-                    .clickable(onClick = logoCb),
+                    .padding(horizontal = 8.dp),
                 contentAlignment = Alignment.Center
             ) {
                 Image(
